@@ -3,14 +3,6 @@
 
 <head>
   <meta charset="UTF-8">
-  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
-<script>
-  window.TrackJS && TrackJS.install({ 
-    token: "cc0141f11fd148b3a993c7f4954c5f60"
-    // for more configuration options, see https://docs.trackjs.com
-  });
-</script>
-                        
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
@@ -94,7 +86,14 @@
       <button>Trigger a Global Error</button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "cc0141f11fd148b3a993c7f4954c5f60",
+      application: "cse110_lab9"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
   <script>
     var form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -103,13 +102,19 @@
       var firstNum = document.querySelector('#first-num').value;
       var secondNum = document.querySelector('#second-num').value;
       var operator = document.querySelector('#operator').value;
+      if(isNaN(firstNum) || firstNum==''){
+        throw new CustomError('First number is not valid');
+      }
+      if(isNaN(secondNum) || secondNum==''){
+        throw new CustomError('Second number is not valid');
+      }
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
 
     // Start your code here
     // You may move this JS to another file if you wish
     window.onerror = function() {
-        console.log('JavaScript error');
+        console.log('An error has occurred');
     }
     // Step 2 - Adding Buttons for Console Testing
     // Reference: https://developer.chrome.com/docs/devtools/console/api/
@@ -197,16 +202,19 @@
     // Step 3 - Trying Try/Catch
     // Reference: https://javascript.info/try-catch
     function aintGonnaWork(){
-      const element = document.getElementsByTagName('head');
-      element.innerHTML = '';
+      The_undefined_variable;
     }
-    try {
-      aintGonnaWork();
-    } catch(err) {
-      alert('catch');
-      throw err;
-    } finally {
-      alert('finally');
+
+    function triggerError(){
+      try {
+        aintGonnaWork();
+      } 
+      catch(e) {
+        throw new CustomError(e);
+      } 
+      finally {
+        console.log('Global error function triggered');
+      }
     }
 
     // Step 4 - Throw and Custom Errors
@@ -220,36 +228,21 @@
     function test() {
       throw new CustomError("Custom error!");
     }
-    try {
-      test();
-    } catch(err) {
-      alert(err.message); // Custom error!
-      alert(err.name); // CustomError
-      alert(err.stack); // a list of nested calls with line numbers for each
-    }
+
+    function triggercustomError(){
+      try {
+        test();
+      } catch(err) {
+        alert(err.message); // Custom error!
+        alert(err.name); // CustomError
+        alert(err.stack); // a list of nested calls with line numbers for each
+      }
+    } 
 
 
     // Step 5 - The Global Error handler and 3rd Party Tracking
-    buttons[14].addEventListener('click', function(){
-      try{
-        aintGonnaWork();
-      }
-      catch(e){
-        throw new CustomError(e);
-      }
-      finally{
-        console.log('last');
-      }
-    //   window.onerror = function(message, url, linenumber) {
-    //     alert('JavaScript error: ' + message + ' on line ' + linenumber + ' for ' + url);
-    });
-      // window.onerror = function(){
-      //   console.log('JavaScript error: ');
-      // }
-    // });
-    TrackJS.track('Testing TrackJS!');
-                        
-  </script>
+    buttons[14].addEventListener('click', triggerError);                       
+</script>
 </body>
 
 </html>
