@@ -88,20 +88,142 @@
   </main>
 
   <script>
-    let form = document.querySelector('form');
+    var form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
-      let output = document.querySelector('output');
-      let firstNum = document.querySelector('#first-num').value;
-      let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
+      var output = document.querySelector('output');
+      var firstNum = document.querySelector('#first-num').value;
+      var secondNum = document.querySelector('#second-num').value;
+      var operator = document.querySelector('#operator').value;
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
 
-    let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
+    var errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    // Step 2 - Adding Buttons for Console Testing
+    // Reference: https://developer.chrome.com/docs/devtools/console/api/
+    let buttons = document.getElementsByTagName('button');
+    // Console Log Button
+    buttons[0].addEventListener('click', function(){
+      console.log(`${firstNum} ${operator} ${secondNum} = ${output}`);
+    });
+    // Console Error Button
+    buttons[1].addEventListener('click', function(){
+      console.error('There is an error.');
+    });
+    // Console Count Button
+    buttons[2].addEventListener('click', function(){
+      console.count();
+    });
+    // Console Warn Button
+    buttons[3].addEventListener('click', function(){
+      console.warn('Warning');
+    });
+    // Console Assert Button
+    buttons[4].addEventListener('click', function(){
+      const reason = 'x is expected to be more than y';
+      console.assert(firstNum > secondNum, {firstNum, secondNum, reason});
+    });
+    // Console Clear Button
+    buttons[5].addEventListener('click', function(){
+      console.clear();
+    });
+    // Console Dir Button
+    buttons[6].addEventListener('click', function(){
+      console.dir(buttons);
+    });
+    // Console dirxml Button 
+    buttons[7].addEventListener('click', function(){
+      console.dirxml(buttons[6]);
+    });
+    // Console Group Start 
+    const label = 'Console Group';
+    buttons[8].addEventListener('click', function(){
+      console.group(label);
+    });
+    // Console Group End
+    buttons[9].addEventListener('click', function(){
+      console.groupEnd(label);
+    });
+    // Console Table Button
+    var table = [
+      {
+        department: 'cse',
+        num: '110',
+      },
+      {
+        department: 'cse',
+        num: '101',
+      },
+      {
+        department: 'cogs',
+        num: '101b',
+      }
+    ];
+    buttons[10].addEventListener('click', function(){
+      console.table(table);
+    });
+    // Start Timer Button
+    buttons[11].addEventListener('click', function(){
+      console.time();
+    });
+    // Stop Timer Button
+    buttons[12].addEventListener('click', function(){
+      console.timeEnd();
+    });
+    // Console Trace Button
+    buttons[13].addEventListener('click', function(){
+      const first = () => { second(); };
+      const second = () => { third(); };
+      const third = () => { fourth(); };
+      const fourth = () => { console.trace(); };
+      first();
+    });
+
+    // Step 3 - Trying Try/Catch
+    // Reference: https://javascript.info/try-catch
+    function aintGonnaWork(){
+      const element = document.getElementsByTagName('head');
+      element.remove();
+    }
+    try {
+      aintGonnaWork();
+    } catch(err) {
+      alert('catch');
+      throw err;
+    } finally {
+      alert('finally');
+    }
+
+    // Step 4 - Throw and Custom Errors
+    // Reference: https://javascript.info/custom-errors
+    class CustomError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "CustomError";
+      }
+    }
+    function test() {
+      throw new CustomError("Custom error!");
+    }
+    try {
+      test();
+    } catch(err) {
+      alert(err.message); // Custom error!
+      alert(err.name); // CustomError
+      alert(err.stack); // a list of nested calls with line numbers for each
+    }
+
+    // Step 5 - The Global Error handler and 3rd Party Tracking
+    // buttons[14].addEventListener('click', function(){
+    //   window.onerror = function(message, url, linenumber) {
+    //     alert('JavaScript error: ' + message + ' on line ' + linenumber + ' for ' + url);
+    //   }
+    // });
+
   </script>
 </body>
 
