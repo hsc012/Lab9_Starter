@@ -98,14 +98,14 @@
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
 
-    var errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
-
     // Start your code here
     // You may move this JS to another file if you wish
-
+    window.onerror = function() {
+        console.log('JavaScript error');
+    }
     // Step 2 - Adding Buttons for Console Testing
     // Reference: https://developer.chrome.com/docs/devtools/console/api/
-    let buttons = document.getElementsByTagName('button');
+    let buttons = Array.from(document.querySelectorAll('#error-btns > button'));
     // Console Log Button
     buttons[0].addEventListener('click', function(){
       console.log('Console Log Demo');
@@ -124,8 +124,11 @@
     });
     // Console Assert Button
     buttons[4].addEventListener('click', function(){
-      const reason = 'x is expected to be more than y';
-      console.assert(firstNum > secondNum, {firstNum, secondNum, reason});
+      var output = document.querySelector('output');
+      var firstNum = 1;
+      var secondNum = 0;
+      const reason = 'first number is not equal to the second number';
+      console.assert(firstNum == secondNum, {firstNum, secondNum, reason});
     });
     // Console Clear Button
     buttons[5].addEventListener('click', function(){
@@ -217,11 +220,24 @@
       alert(err.stack); // a list of nested calls with line numbers for each
     }
 
+
     // Step 5 - The Global Error handler and 3rd Party Tracking
-    // buttons[14].addEventListener('click', function(){
+    buttons[14].addEventListener('click', function(){
+      try{
+        aintGonnaWork();
+      }
+      catch(e){
+        throw new CustomError(e);
+      }
+      finally{
+        console.log('last');
+      }
     //   window.onerror = function(message, url, linenumber) {
     //     alert('JavaScript error: ' + message + ' on line ' + linenumber + ' for ' + url);
-    //   }
+    });
+      // window.onerror = function(){
+      //   console.log('JavaScript error: ');
+      // }
     // });
 
   </script>
