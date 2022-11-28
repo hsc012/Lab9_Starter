@@ -3,6 +3,14 @@
 
 <head>
   <meta charset="UTF-8">
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+<script>
+  window.TrackJS && TrackJS.install({ 
+    token: "cc0141f11fd148b3a993c7f4954c5f60"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+</script>
+                        
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
@@ -239,7 +247,8 @@
       //   console.log('JavaScript error: ');
       // }
     // });
-
+    TrackJS.track('Testing TrackJS!');
+                        
   </script>
 </body>
 
